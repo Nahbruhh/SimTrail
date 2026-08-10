@@ -39,3 +39,11 @@ solver-neutral.
 
 Team synchronization, cloud hosting, automatic model editing, optimization,
 and AI assistance are intentionally outside the pre-1.0 critical path.
+
+## Post-1.0 sustainability
+
+After the community product reaches its reliability goals, the maintainers may
+offer paid official support and optional enterprise capabilities such as SSO,
+central administration, managed synchronization, and contractual compatibility
+support. These offerings will follow the boundaries in `PROJECT_MODEL.md` and
+will not retroactively change the Apache-2.0 license of published code.

@@ -28,3 +28,10 @@ automation where practical.
 The project is independent of solver vendors. Vendor-specific behavior belongs
 in adapters or connectors; the provenance model and run register should remain
 solver-neutral.
+
+## Project sustainability
+
+The maintainers may fund development through optional official support,
+training, integration work, and future enterprise offerings. These activities
+must follow the public commitments in `PROJECT_MODEL.md` and must not revoke
+the Apache-2.0 rights granted for published community code.

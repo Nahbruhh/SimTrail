@@ -160,6 +160,7 @@ models, customer data, solver license information, or confidential logs.
 Useful project references:
 
 - [Roadmap](ROADMAP.md)
+- [Project and commercial model](PROJECT_MODEL.md)
 - [Architecture](docs/ARCHITECTURE.md)
 - [Known limitations](docs/KNOWN_LIMITATIONS.md)
 - [Security policy](SECURITY.md)
@@ -171,3 +172,9 @@ Useful project references:
 SimTrail source code is licensed under the [Apache License 2.0](LICENSE). See
 [NOTICE](NOTICE), [third-party notices](THIRD_PARTY_NOTICES.md), and the
 [trademark policy](TRADEMARKS.md) for distribution details.
+
+The project uses an **Apache-2.0 community core + protected SimTrail brand +
+optional paid official support and future enterprise capabilities** model.
+The open-source license is not a trial license, and paid support is not
+required to use the community project. See [PROJECT_MODEL.md](PROJECT_MODEL.md)
+for the commitments and boundaries of this model.
