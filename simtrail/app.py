@@ -5,15 +5,7 @@ import os
 import sys
 from pathlib import Path
 
-from PySide6.QtCore import QStandardPaths
-from PySide6.QtGui import QColor, QPalette
-from PySide6.QtWidgets import QApplication
-
 from . import __version__
-from .database import RunRepository
-from .sample_data import demo_runs
-from .theme import APP_STYLE
-from .ui import MainWindow
 
 
 def parse_args(argv: list[str]) -> argparse.Namespace:
@@ -26,6 +18,19 @@ def parse_args(argv: list[str]) -> argparse.Namespace:
 
 def main(argv: list[str] | None = None) -> int:
     args = parse_args(sys.argv[1:] if argv is None else argv)
+
+    # Keep GUI imports after argument parsing so metadata commands such as
+    # ``simtrail --version`` work on headless systems without Qt platform
+    # libraries. Normal desktop startup still loads the full PySide6 stack.
+    from PySide6.QtCore import QStandardPaths
+    from PySide6.QtGui import QColor, QPalette
+    from PySide6.QtWidgets import QApplication
+
+    from .database import RunRepository
+    from .sample_data import demo_runs
+    from .theme import APP_STYLE
+    from .ui import MainWindow
+
     app = QApplication(sys.argv[:1])
     app.setApplicationName("SimTrail")
     app.setOrganizationName("SimTrail")

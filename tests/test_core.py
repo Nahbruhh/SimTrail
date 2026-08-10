@@ -1,5 +1,7 @@
 import json
 import socket
+import subprocess
+import sys
 import threading
 import time
 import uuid
@@ -25,6 +27,16 @@ def make_run(name="Baseline", mesh="2 mm", stress="200 MPa"):
         inputs={"Material": "Steel", "Mesh": mesh},
         results={"Max equivalent stress": stress, "Minimum safety factor": 2.1},
     )
+
+
+def test_version_command_does_not_initialize_the_gui():
+    completed = subprocess.run(
+        [sys.executable, "main.py", "--version"],
+        check=True,
+        capture_output=True,
+        text=True,
+    )
+    assert completed.stdout.strip() == "SimTrail 0.1.0"
 
 
 def test_bundled_example_resource_is_available():
