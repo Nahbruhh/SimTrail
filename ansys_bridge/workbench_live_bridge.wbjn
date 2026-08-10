@@ -1,0 +1,47 @@
+# SimTrail one-shot live bridge for Ansys Workbench
+#
+# 1. Keep SimTrail open on the Workbench Scan page.
+# 2. In Workbench choose File > Scripting > Run Script File...
+# 3. Run this file. Workbench waits for one local SimTrail request.
+# 4. In SimTrail click Scan Workbench.
+#
+# The listener accepts connections from this machine only and exits after one
+# response. No project data is sent over the network and the project is not modified.
+
+import json
+import os
+
+
+scanner_directory = os.path.dirname(__file__)
+scanner_path = os.path.join(scanner_directory, "workbench_inventory.wbjn")
+execfile(scanner_path)
+
+from System import Array, Byte
+from System.Net import IPAddress
+from System.Net.Sockets import TcpListener
+from System.Text import Encoding
+
+
+listener = TcpListener(IPAddress.Loopback, 51280)
+listener.Start()
+print("SimTrail bridge ready on 127.0.0.1:51280. Click Scan Workbench in SimTrail.")
+
+client = listener.AcceptTcpClient()
+try:
+    stream = client.GetStream()
+    request_buffer = Array.CreateInstance(Byte, 256)
+    count = stream.Read(request_buffer, 0, request_buffer.Length)
+    request = Encoding.UTF8.GetString(request_buffer, 0, count).strip()
+    if request == "SIMTRAIL_SCAN_V1":
+        response = json.dumps(payload, indent=2)
+    else:
+        response = json.dumps({"error": "Unsupported SimTrail bridge request"})
+    response_bytes = Encoding.UTF8.GetBytes(response)
+    stream.Write(response_bytes, 0, response_bytes.Length)
+    stream.Flush()
+finally:
+    client.Close()
+    listener.Stop()
+
+print("SimTrail scan delivered. The one-shot bridge is now closed.")
+

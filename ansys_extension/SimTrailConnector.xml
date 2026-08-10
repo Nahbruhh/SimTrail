@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension version="1" name="SimTrailConnector">
+  <guid shortid="SimTrailConnector">52b0ef38-468b-4e07-92bd-98d9894153df</guid>
+  <author>SimTrail</author>
+  <description>Persistent local connector between Ansys Workbench and SimTrail.</description>
+  <script src="simtrail_connector.py" compiled="true" />
+  <interface context="Project">
+    <callbacks>
+      <oninit>on_init</oninit>
+      <onready>on_ready</onready>
+      <onload>on_load</onload>
+      <onsave>on_save</onsave>
+      <onterminate>on_terminate</onterminate>
+    </callbacks>
+  </interface>
+  <workflow name="SimTrailObservation" context="Project" version="1">
+    <callbacks>
+      <onaftertaskreset>on_project_action</onaftertaskreset>
+      <onaftertaskrefresh>on_project_action</onaftertaskrefresh>
+      <onaftertaskupdate>on_project_action</onaftertaskupdate>
+      <onaftertaskduplicate>on_project_action</onaftertaskduplicate>
+      <onaftertasksourceschanged>on_project_action</onaftertasksourceschanged>
+      <onaftertaskcreation>on_project_action</onaftertaskcreation>
+      <onaftertaskdeletion>on_project_action</onaftertaskdeletion>
+    </callbacks>
+  </workflow>
+</extension>
+

@@ -1,0 +1,26 @@
+{
+  "name": "Run 012 · refined mesh",
+  "project": "A320 Actuator Bracket",
+  "analyst": "M. Nguyen",
+  "created_at": "2026-07-16T10:30:00",
+  "status": "Solved",
+  "solver": "Ansys Mechanical 2026 R1",
+  "notes": "Mesh sensitivity confirmation after design review.",
+  "inputs": {
+    "Geometry": "BRKT-042 rev C",
+    "Material": "Al 7075-T6",
+    "Rib thickness": "10 mm",
+    "Contact / bracket-pin": "Frictional · μ 0.20",
+    "Global mesh size": "1.0 mm",
+    "Mesh nodes": "2.46 M",
+    "Load / Fx": "12.0 kN",
+    "Constraint": "Fixed support"
+  },
+  "results": {
+    "Max equivalent stress": "281 MPa",
+    "Max total deformation": "0.72 mm",
+    "Minimum safety factor": 1.78,
+    "Solve time": "51 min"
+  }
+}
+

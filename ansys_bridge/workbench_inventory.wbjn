@@ -1,0 +1,142 @@
+# SimTrail Workbench inventory scanner
+#
+# Run inside Ansys Workbench:
+#   File > Scripting > Run Script File...
+#
+# This script is read-only. It does not update, solve, save, or modify the project.
+# It writes an inventory file that can be loaded by SimTrail's Workbench Scan page.
+
+import datetime
+import json
+import os
+
+
+def safe_value(obj, property_name, default=""):
+    try:
+        value = getattr(obj, property_name)
+        return str(value) if value is not None else default
+    except:
+        return default
+
+
+def safe_bool(obj, property_name, default=False):
+    try:
+        return bool(getattr(obj, property_name))
+    except:
+        return default
+
+
+def get_component(system, name):
+    try:
+        return system.GetComponent(Name=name)
+    except:
+        return None
+
+
+def component_state(component):
+    if component is None:
+        return "Not present"
+    for property_name in ("State", "Status"):
+        value = safe_value(component, property_name)
+        if value:
+            return value
+    if safe_bool(component, "IsUpToDate"):
+        return "Up-to-date"
+    return "Update required"
+
+
+def parameter_value(parameter):
+    value = safe_value(parameter, "Value")
+    if value:
+        return value
+    return safe_value(parameter, "Expression")
+
+
+def container_parameters(system, component_name):
+    values = {}
+    try:
+        container = system.GetContainer(ComponentName=component_name)
+        for parameter in container.GetAllParameters():
+            name = safe_value(parameter, "DisplayText") or safe_value(parameter, "Name", "Parameter")
+            values[name] = parameter_value(parameter)
+    except:
+        pass
+    return values
+
+
+def project_file_path():
+    for function_name in ("GetProjectFile", "GetProjectFileName"):
+        try:
+            return str(globals()[function_name]())
+        except:
+            pass
+    try:
+        return str(GetProjectDirectory())
+    except:
+        return ""
+
+
+project_path = project_file_path()
+project_name = os.path.splitext(os.path.basename(project_path))[0] if project_path else "Open Workbench project"
+component_names = ("Engineering Data", "Geometry", "Model", "Setup", "Solution", "Results")
+systems_payload = []
+
+for index, system in enumerate(GetAllSystems()):
+    system_id = safe_value(system, "UserId", chr(65 + index))
+    display_name = safe_value(system, "DisplayText", system_id)
+    analysis_type = safe_value(system, "AnalysisType")
+    if not analysis_type:
+        analysis_type = safe_value(system, "SystemType", display_name)
+    states = {}
+    components = {}
+    for component_name in component_names:
+        component = get_component(system, component_name)
+        components[component_name] = component
+        if component is not None:
+            states[component_name] = component_state(component)
+    geometry = components.get("Geometry")
+    shared_source = safe_value(geometry, "UserId") if geometry is not None else ""
+    results_state = states.get("Results", states.get("Solution", ""))
+    solved = results_state.lower() in ("up-to-date", "solved", "current")
+    input_parameters = {}
+    result_parameters = {}
+    for component_name in ("Engineering Data", "Geometry", "Model", "Setup", "Solution"):
+        input_parameters.update(container_parameters(system, component_name))
+    result_parameters.update(container_parameters(system, "Results"))
+    overall_state = "Up-to-date"
+    if any("required" in value.lower() for value in states.values()):
+        overall_state = "Update required"
+    systems_payload.append({
+        "id": system_id,
+        "name": display_name,
+        "analysis_type": analysis_type,
+        "state": overall_state,
+        "family": shared_source or analysis_type,
+        "shared_source": shared_source,
+        "derived_from": "",
+        "solved": solved,
+        "cell_states": states,
+        "inputs": input_parameters,
+        "results": result_parameters
+    })
+
+local_app_data = os.environ.get("LOCALAPPDATA", os.path.expanduser("~"))
+output_directory = os.path.join(local_app_data, "SimTrail", "bridge")
+if not os.path.isdir(output_directory):
+    os.makedirs(output_directory)
+output_path = os.path.join(output_directory, "latest.simtrail-workbench.json")
+
+payload = {
+    "schema_version": 1,
+    "project_name": project_name,
+    "project_path": project_path,
+    "ansys_version": safe_value(globals().get("AnsysVersion", None), "Version", "Workbench"),
+    "scanned_at": datetime.datetime.now().isoformat(),
+    "systems": systems_payload
+}
+
+with open(output_path, "w") as stream:
+    json.dump(payload, stream, indent=2)
+
+print("SimTrail inventory written to: " + output_path)
+print("Detected systems: " + str(len(systems_payload)))

@@ -1,0 +1,26 @@
+SIMTRAIL TEST KIT
+=================
+
+1. Run SimTrail.exe.
+   Windows SmartScreen may warn because this test build is not code-signed.
+   Choose "More info" and "Run anyway" only if you received this package
+   directly from the SimTrail developer.
+
+2. To connect Ansys Workbench 2024 R2:
+   - Close Workbench.
+   - Open PowerShell in the connector folder.
+   - Run:
+       .\install_extension.ps1 -AnsysVersion v242
+   - Restart Workbench.
+   - Enable SimTrailConnector under Extensions > Manage Extensions.
+
+3. SimTrail stores its local SQLite database under the current user's local
+   application-data folder. Uninstalling or deleting the portable EXE does not
+   delete that database.
+
+4. Result extraction reads existing evaluated scalar results. It does not
+   solve models, but it can start Mechanical and consume a Mechanical license.
+
+5. SimTrail is an independent Apache-2.0 open-source project and is not
+   affiliated with or endorsed by Ansys. See LICENSE, NOTICE, and
+   THIRD_PARTY_NOTICES.md and the licenses folder included with this test kit.

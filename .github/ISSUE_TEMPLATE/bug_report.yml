@@ -1,0 +1,48 @@
+name: Bug report
+description: Report a reproducible SimTrail problem using sanitized data.
+title: "[Bug]: "
+labels: ["bug", "triage"]
+body:
+  - type: markdown
+    attributes:
+      value: Do not upload proprietary simulation models, customer data, credentials, or license files.
+  - type: input
+    id: version
+    attributes:
+      label: SimTrail version
+      placeholder: 0.1.0 or commit hash
+    validations:
+      required: true
+  - type: input
+    id: environment
+    attributes:
+      label: Environment
+      placeholder: Windows 11, Ansys 2024 R2, Python 3.11
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Reproduction steps
+      description: Use a synthetic or sanitized project where possible.
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual behavior and sanitized logs
+    validations:
+      required: true
+  - type: checkboxes
+    id: privacy
+    attributes:
+      label: Data check
+      options:
+        - label: I removed proprietary, personal, customer, credential, and licensing information.
+          required: true

@@ -1,0 +1,55 @@
+[build-system]
+requires = ["setuptools>=77"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "simtrail"
+version = "0.1.0"
+description = "A local-first, open-source simulation project and run manager"
+readme = "README.md"
+license = "Apache-2.0"
+requires-python = ">=3.11"
+authors = [
+    {name = "SimTrail contributors"},
+]
+keywords = ["CAE", "FEA", "simulation", "provenance", "Ansys", "SPDM"]
+classifiers = [
+    "Development Status :: 2 - Pre-Alpha",
+    "Environment :: Win32 (MS Windows)",
+    "Intended Audience :: Science/Research",
+    "Operating System :: Microsoft :: Windows",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Scientific/Engineering",
+]
+dependencies = [
+    "PySide6>=6.7",
+    "openpyxl>=3.1",
+]
+
+[project.optional-dependencies]
+dev = [
+    "PyInstaller>=6.0",
+    "pytest>=8.0",
+    "ruff>=0.12",
+]
+
+[project.scripts]
+simtrail = "simtrail.app:main"
+
+[tool.setuptools.packages.find]
+include = ["simtrail*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]
+
+[tool.ruff]
+target-version = "py311"
+line-length = 120
+extend-exclude = ["ansys_bridge", "ansys_extension", "build", "dist"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B"]
+ignore = ["E501"]
