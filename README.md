@@ -54,6 +54,9 @@ Use **Save project** to create a portable `*.simtrail-project.json` containing e
 
 ## Workbench project scan
 
+The live Workbench integration and ACT connector setup described below are
+currently Windows-specific.
+
 The **Workbench scan** page discovers every system in an open Workbench project, suggests a reference analysis, compares captured fields, accepts per-system analyst context, and imports selected systems into the run register.
 
 Install the persistent ACT connector once:
