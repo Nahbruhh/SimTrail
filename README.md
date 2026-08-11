@@ -24,7 +24,9 @@ with Ansys.
 
 ## Run it
 
-Python 3.11+ is required.
+Python 3.11+ is required. Ansys is optional for exploring the demo dataset and
+the solver-neutral project workflow; it is only required for the live Workbench
+integration.
 
 ```powershell
 python -m pip install -e .
